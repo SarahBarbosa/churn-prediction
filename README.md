@@ -24,7 +24,7 @@ Na primeira semana deste projeto, o foco está na preparação dos dados e na ob
 
 **Notebook Correspondente:**
 
-- [`S01_Limpeza-analise-exploratoria-dos-dados.ipynb`](https://github.com/SarahBarbosa/AluraDataChallenge_2/blob/main/Semana%2001/S01_Limpeza-analise-exploratoria-dos-dados.ipynb)
+- [`S01_Limpeza-analise-exploratoria-dos-dados.ipynb`](https://github.com/SarahBarbosa/AluraDataChallenge_2/blob/main/S01_Limpeza_analise_exploratoria_dos_dados.ipynb)
 
 > Status do Projeto: Em desenvolvimento :warning:
 
