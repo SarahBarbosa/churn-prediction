@@ -2,10 +2,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 def plot_countplots(data, coluna_hue, grupos, paleta, figsize=(12, 8)):
     """
     Gera subplots de gráficos de barras com contagem para várias colunas 
