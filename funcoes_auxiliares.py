@@ -79,4 +79,24 @@ def preprocessamento_binarizacao(df, colunas_sim_nao, colunas_multiclasses, colu
     # Concatena as colunas de serviço ao DataFrame
     return pd.concat([df, colunas_sem_servico], axis=1)
 
+def renomeia_coluna(nome_coluna):
+    """
+    Esta função recebe o nome de uma coluna em formato de string e realiza as 
+    seguintes operações:
+    
+    1. Divide o nome da coluna usando o caractere '.' como separador.
+    2. Pega a última parte após o último ponto (se houver pontos no nome).
+    3. Converte a primeira letra da parte final para maiúscula, substitui 
+    espaços por '_' e tira o parêntese.
 
+    Parâmetros:
+    - nome_coluna (str): O nome da coluna que deseja renomear.
+    """
+    primeiro_ponto = nome_coluna.find('.')
+    if primeiro_ponto != -1:
+        novo_nome = nome_coluna[primeiro_ponto+1:]
+        novo_nome = novo_nome.replace('.', '_')
+    else:
+        novo_nome = nome_coluna
+    novo_nome = novo_nome.capitalize().replace(' ', '_').replace(')', '').replace('(', '')
+    return novo_nome
