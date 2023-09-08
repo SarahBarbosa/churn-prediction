@@ -1,6 +1,6 @@
 # Alura Challenge Dados 2ª Edição
 
-Neste [challenge](https://www.alura.com.br/challenges/dados-2?host=https://cursos.alura.com.br), a meta é criar uma solução que auxilie uma empresa do setor de telecomunicações a compreender e prever o Churn (taxa de perda de clientes). 
+No [Alura Challenge Dados 2ª Edição](https://www.alura.com.br/challenges/dados-2?host=https://cursos.alura.com.br), o objetivo é desenvolver uma solução para uma empresa de telecomunicações que visa compreender e prever a Taxa de Evasão de Clientes (Churn Rate). O projeto segue um cronograma de quatro semanas, com cada semana correspondendo a uma etapa específica. Nesta descrição, focaremos na primeira semana:
 
 ## Detalhes do Projeto: Redução da Taxa de Evasão de Clientes na Novexus
 
@@ -8,13 +8,9 @@ Neste [challenge](https://www.alura.com.br/challenges/dados-2?host=https://curso
   <img src="https://imgur.com/1yxAnVf.png" style="width: 100%;">
 </p>
 
-### :arrow_right: Objetivo
+### :arrow_right: Semana 01: Limpeza e análise exploratória de dados (ETL & EDA)
 
-O projeto tem como principal objetivo reduzir a Taxa de Evasão de Clientes, também conhecida como Churn Rate, na Novexus, uma operadora de telecomunicações. Para abordar esse desafio, o projeto foi dividido em três etapas, que serão realizadas ao longo de quatro semanas, com cada etapa correspondendo a um notebook específico. 
-
-### :arrow_right: Semana 01: Limpeza e análise exploratória de dados
-
-Na primeira semana deste projeto, o foco está na preparação dos dados e na obtenção de insights iniciais. As atividades incluem:
+Na primeira semana deste projeto, o foco foi na preparação dos dados e na obtenção de insights iniciais (ETL & EDA). As atividades incluem:
 
 - Compreender o conteúdo do conjunto de dados.
 - Identificar e tratar inconsistências nos dados.
