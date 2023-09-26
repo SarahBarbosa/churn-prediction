@@ -1,46 +1,32 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import StratifiedKFold, cross_val_score, GridSearchCV
+from sklearn.model_selection import cross_val_score, RepeatedStratifiedKFold, GridSearchCV
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import TomekLinks
+from imblearn.pipeline import Pipeline as PipelineIMB
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
 
 
-def descricao_colunas(dados):
+def info_dataframe(df):
     """
-  Esta função recebe um DataFrame e exibe informações resumidas sobre suas 
-  colunas, incluindo o tipo de dados e, se houver mais de 4 valores únicos, 
-  a contagem de valores únicos.
+    Gera um DataFrame com informações sobre as colunas do DataFrame.
+    """
+    col_types = df.dtypes
+    unique_values = df.apply(lambda col: col.unique())
+    info_df = pd.DataFrame({'Tipo': col_types, 
+                            'Valores Únicos': unique_values}, 
+                            index=df.columns)
 
-  Parâmetros:
-  - dados (pd.DataFrame): O DataFrame contendo os dados a serem inspecionados.
-  """
-    for col in dados.columns:
-        tipo_dado = dados[col].dtype
-        n_val_unico = dados[col].nunique()
-
-        if n_val_unico > 4:
-            print(
-                f'# {col}: {tipo_dado}, {n_val_unico}/{len(dados)} valores únicos'
-            )
-        else:
-            valores_unicos = ', '.join(map(str, dados[col].unique()))
-            print(f'# {col}: {tipo_dado}, Valores Únicos: {valores_unicos}')
-
+    return info_df
 
 class Tratamentos:
     """
-  Classe para realizar tratamentos iniciais.
-
-  Args:
-      dados (pandas.DataFrame): O DataFrame no qual os tratamentos serão 
-      aplicados.
-
-  Methods:
-      string_to_float():
-          Converte os valores das colunas especificadas para valores numéricos.
-
-      remove_ausentes(string=True):
-          Remove as linhas do DataFrame onde os valores da(s) coluna(s) 
-          especificada(s) estão em branco (ou NaN).
-  """
+    Classe para realizar tratamentos iniciais.
+    """
     def __init__(self, dados):
         self.dados = dados
 
@@ -60,57 +46,18 @@ class Tratamentos:
         self.dados = self.dados.drop(colunas, axis=1)
         return self.dados
 
-
-def encoding_manual(dados, colunas_sim_nao, colunas_multiclasses,
-                    colunas_mistas):
-    """
-  Realiza o pré-processamento de um DataFrame, convertendo colunas categóricas 
-  em formatos one-hot encoding.
-
-  Parâmetros:
-  - dados (pd.DataFrame): O DataFrame que contém os dados a serem 
-  pré-processados.
-  - colunas_sim_nao (list): Uma lista de nomes de colunas que contêm valores 
-  'Yes' e 'No' a serem binarizados (0 ou 1).
-  - colunas_multiclasses (list): Uma lista de nomes de colunas com categorias 
-  múltiplas a serem transformadas em one-hot encoding.
-  - colunas_mistas (list): Uma lista de nomes de colunas que podem conter 
-  valores 'Yes', 'No', 'No internet service' e 'No phone service'.
+def adicionar_estatisticas(ax, dados, metrica, texto_y, cor):
   """
-    dados[colunas_sim_nao] = dados[colunas_sim_nao].replace({
-        'Yes': 1,
-        'No': 0
-    })
-    dados['customer.gender'] = dados['customer.gender'].replace({
-        'Female': 1,
-        'Male': 0
-    })
-    dados = pd.get_dummies(dados, columns=colunas_multiclasses, dtype=int)
+  Adiciona estatísticas resumidas a um subplot.
+  """
+  val = dados.groupby('Churn')[metrica].agg(['mean', 'median', 'min', 'max'])
 
-    def criando_coluna_sem_servico(row):
-        no_phone_service = 1 if 'No phone service' in row.values else 0
-        no_internet_service = 1 if 'No internet service' in row.values else 0
-        return pd.Series({
-            'No_phone_service': no_phone_service,
-            'No_internet_service': no_internet_service
-        })
+  texto = f'Média: {val["mean"].iloc[0]:.2f} | {val["mean"].iloc[1]:.2f}\n'
+  texto += f'Mediana: {val["median"].iloc[0]:.2f} | {val["median"].iloc[1]:.2f}\n'
+  texto += f'Mínimo: {val["min"].iloc[0]:.2f} | {val["min"].iloc[1]:.2f}\n'
+  texto += f'Máximo: {val["max"].iloc[0]:.2f} | {val["max"].iloc[1]:.2f}'
 
-    colunas_sem_servico = dados[colunas_mistas].apply(
-        criando_coluna_sem_servico, axis=1)
-
-    dados[colunas_mistas] = dados[colunas_mistas].replace({
-        'Yes':
-        1,
-        'No':
-        0,
-        'No internet service':
-        0,
-        'No phone service':
-        0
-    })
-
-    return pd.concat([dados, colunas_sem_servico], axis=1)
-
+  ax.text(0.5, texto_y, texto, transform=ax.transAxes, fontsize=12, color=cor, ha='center')
 
 def renomear_coluna(nome_coluna):
     """
@@ -128,236 +75,91 @@ def renomear_coluna(nome_coluna):
         novo_nome = novo_nome.replace('.', '_')
     else:
         novo_nome = nome_coluna
-    novo_nome = novo_nome.capitalize().replace(' ', '_').replace(')',
-                                                                 '').replace(
-                                                                     '(', '')
+    
+    novo_nome = novo_nome.capitalize().replace(' ', '_').replace(')', '').replace('(', '')
     return novo_nome
 
 
-def pipeline_features(dados,
-                      colunas_sim_nao,
-                      colunas_multiclasses,
-                      colunas_mistas,
-                      binarizacao_manual=True,
-                      add_novas_features=True,
-                      drop_col_extra=True,
-                      standarscaler=True,
-                      renomeiar_col=True):
+def TotalServiceTransformer(X):
     """
-    Um pipeline para pré-processamento de dados.
+    A função calcula o número total de serviços contratados para cada cliente com base nas 
+    colunas especificadas no lista 'servicos'. A função considera um serviço contratado se 
+    o valor na coluna correspondente for igual a 'Yes' e conta quantos serviços estão ativos 
+    para cada cliente.
+    """
+    servicos = ['Multiplelines', 'Onlinesecurity', 'Onlinebackup',
+                'Deviceprotection', 'Techsupport', 'Streamingtv',
+                'Streamingmovies']
+    contador_sim = lambda col: col.apply(lambda x: 1 if x == 'Yes' else 0)
+    X['TotalServices'] = X[servicos].apply(contador_sim, axis=1).sum(axis=1)
 
-    Args:
-        dados (DataFrame): O DataFrame contendo os dados.
-        binarizacao_manual (bool): Se True, aplica binarização manual em 
-        colunas específicas.
-        add_novas_features (bool): Se True, cria novas features com base nos 
-        dados existentes.
-        drop_col_extra (bool): Se True, remove colunas adicionais especificadas.
-        standarscaler (bool): Se True, aplica StandardScaler às colunas 
-        numéricas.
-        renomeiar_col (bool): Se True, renomeia as colunas do DataFrame.
+
+def cross_validation_models_set(abordagem, preprocessor, X_train, y_train, random_state=42):
+    """
+    Realiza uma validação cruzada para avaliar o desempenho de diferentes modelos de classificação 
+    usando diferentes abordagens de tratamento de desequilíbrio de classe.
+
+    abordagem (str): A abordagem usada para tratar o desequilíbrio de classe, pode ser 'Oversampling', 
+    'Undersampling' ou 'Default'.
     """
 
-    if binarizacao_manual:
-        dados = encoding_manual(dados, colunas_sim_nao, colunas_multiclasses,
-                                colunas_mistas)
-        dados = Tratamentos(dados).remove_colunas(
-            'internet.InternetService_No')
-        dados = Tratamentos(dados).remove_colunas('phone.PhoneService')
+    classifiers = {
+        'Regressão Logística': LogisticRegression(random_state=random_state, max_iter=1000),
+        'K-Vizinhos Mais Próximos (KNN)': KNeighborsClassifier(),
+        'Árvore de Decisão': DecisionTreeClassifier(random_state=random_state),
+        'Floresta Randômica': RandomForestClassifier(random_state=random_state),
+        'Gradient Boosting': GradientBoostingClassifier(random_state=random_state),
+        'Support Vector Machine': SVC(random_state=random_state)
+    }
 
-    if add_novas_features:
-        dados = criar_novas_features(dados)
-
-    if drop_col_extra:
-        dados = Tratamentos(dados).remove_colunas('account.Charges.Total')
-
-    if standarscaler:
-        colunas_numericas = [
-            col for col in dados.columns if dados[col].nunique() > 2
-        ]
-        scaler = StandardScaler()
-        dados[colunas_numericas] = scaler.fit_transform(
-            dados[colunas_numericas])
-
-    if renomeiar_col:
-        dados = dados.rename(columns=renomear_coluna)
-
-    return dados.reset_index(drop=True)
-
-
-def criar_novas_features(dados):
-    """
-    Cria novas features com base nos dados existentes.
-    """
-    servicos = [
-        'internet.OnlineSecurity', 'internet.OnlineBackup',
-        'internet.DeviceProtection', 'internet.TechSupport',
-        'internet.StreamingTV', 'internet.StreamingMovies'
-    ]
-
-    for servico in servicos:
-        dados[f'{servico}_temp'] = (dados[servico]
-                                    == 1) & (dados['No_internet_service'] == 0)
-
-    dados['Num_internet_service'] = dados[[
-        f'{servico}_temp' for servico in servicos
-    ]].sum(axis=1)
-    dados.drop(columns=[f'{servico}_temp' for servico in servicos],
-               inplace=True)
-
-    dados['charge_per_internet_service'] = dados['account.Charges.Monthly'] / (
-        dados['Num_internet_service'] + 1)
-
-    return pd.get_dummies(dados)
-
-
-def cross_validation_models_set(abordagem,
-                                X_train,
-                                y_train,
-                                classificadores,
-                                cv=3,
-                                random_state=42):
-    """
-  Realiza validação cruzada para vários modelos de classificação.
-
-  Parâmetros:
-  abordagem (str): A abordagem utilizada para a validação cruzada ('oversampling' ou 'default').
-  X_train (array-like): Conjunto de treinamento das features.
-  y_train (array-like): Conjunto de treinamento das targets.
-  classificadores (list): Uma lista de tuplas contendo o nome do modelo e o classificador.
-  cv (int ou objeto cv): Número de dobras (folds) ou um objeto de validação cruzada StratifiedKFold.
-  random_state (int): Seed para garantir a reprodutibilidade.
-
-  Retorno:
-  df_resultados (DataFrame): Um DataFrame contendo os resultados da validação cruzada para cada modelo.
-  df_style (Styler): Um Styler pandas para destacar os resultados.
-  """
-    stratified_kfold = StratifiedKFold(n_splits=cv,
-                                       shuffle=True,
-                                       random_state=random_state)
+    cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=random_state)
+    
     resultados = []
 
-    for nome, classificador in classificadores:
-        if abordagem == 'oversampling':
-            roc_auc = cross_val_score(classificador,
-                                      X_train,
-                                      y_train,
-                                      cv=cv,
-                                      scoring='roc_auc').mean()
-            accuracy = cross_val_score(classificador,
-                                       X_train,
-                                       y_train,
-                                       cv=cv,
-                                       scoring='accuracy').mean()
-            precision = cross_val_score(classificador,
-                                        X_train,
-                                        y_train,
-                                        cv=cv,
-                                        scoring='precision').mean()
-            recall = cross_val_score(classificador,
-                                     X_train,
-                                     y_train,
-                                     cv=cv,
-                                     scoring='recall').mean()
-            f1 = cross_val_score(classificador,
-                                 X_train,
-                                 y_train,
-                                 cv=cv,
-                                 scoring='f1').mean()
+    for nome, classificador in classifiers.items():
+        if abordagem == 'Oversampling':
+            resampler = SMOTE()
+        elif abordagem == 'Undersampling':
+            resampler = TomekLinks()
         else:
-            roc_auc = cross_val_score(classificador,
-                                      X_train,
-                                      y_train,
-                                      cv=stratified_kfold,
-                                      scoring='roc_auc').mean()
-            accuracy = cross_val_score(classificador,
-                                       X_train,
-                                       y_train,
-                                       cv=stratified_kfold,
-                                       scoring='accuracy').mean()
-            precision = cross_val_score(classificador,
-                                        X_train,
-                                        y_train,
-                                        cv=stratified_kfold,
-                                        scoring='precision').mean()
-            recall = cross_val_score(classificador,
-                                     X_train,
-                                     y_train,
-                                     cv=stratified_kfold,
-                                     scoring='recall').mean()
-            f1 = cross_val_score(classificador,
-                                 X_train,
-                                 y_train,
-                                 cv=stratified_kfold,
-                                 scoring='f1').mean()
+            resampler = None
 
-        resultados.append([
-            nome,
-            round(roc_auc.mean(), 3),
-            round(accuracy, 3),
-            round(precision, 3),
-            round(recall, 3),
-            round(f1, 3)
-        ])
+        steps = [('Preprocessor', preprocessor)]
+        if resampler:
+            steps.append(('Resampler', resampler))
+        steps.append(('Model', classificador))
+        pipeline = PipelineIMB(steps)
 
-    df_resultados = pd.DataFrame(resultados,
-                                 columns=[
-                                     'Modelo', 'ROC-AUC', 'Accuracy',
-                                     'Precision', 'Recall', 'F1-Score'
-                                 ])
-    df_style = df_resultados.style.background_gradient(
-        cmap='Spectral_r',
-        subset=['ROC-AUC', 'Accuracy', 'Precision', 'Recall', 'F1-Score'],
-        axis=0)
+        metrics = ['roc_auc', 'accuracy', 'precision', 'recall', 'f1']
+        scores = [cross_val_score(pipeline, X_train, y_train, cv=cv, scoring=metric, n_jobs = -1).mean() 
+                  for metric in metrics]
 
-    return df_resultados, df_style
+        resultados.append([nome] + [round(score, 3) for score in scores])
+
+    columns = ['Modelo', 'ROC-AUC', 'Accuracy', 'Precision', 'Recall', 'F1-Score']
+    df_resultados = pd.DataFrame(resultados, columns=columns)
+
+    return df_resultados
 
 
-def hyperparameter_optimization(X_train,
-                                y_train,
-                                modelos,
-                                cv=3,
-                                scoring=['accuracy', 'f1_macro']):
+def hyperparameter_optimization(resampler, preprocessor, X_train, y_train, modelos):
     """
-  Otimiza hiperparâmetros para modelos de classificação usando GridSearchCV.
+    Otimiza hiperparâmetros para modelos de classificação usando GridSearchCV.
+    
+    resampler: SMOTE(), TomekLinks() ou None.
+    """
+    best_score = []
 
-  Parâmetros:
-  X_train (array-like): Conjunto de treinamento das features.
-  y_train (array-like): Conjunto de treinamento das targets.
-  modelos (list): Uma lista de tuplas contendo o nome do modelo, o modelo e os 
-  parâmetros a serem otimizados.
-  cv (int): Número de dobras (folds) para validação cruzada.
-  scoring (list): Lista de métricas de avaliação a serem usadas para otimização.
-
-  Retorno:
-  resultados (DataFrame): Um DataFrame contendo os melhores resultados de 
-  hiperparâmetros 
-  para cada modelo.
-  """
-    melhor_score = []
-
-    for nome_modelo, modelo, parametros in modelos:
-        grid_search = GridSearchCV(modelo,
-                                   parametros,
-                                   cv=cv,
-                                   scoring=scoring,
-                                   refit='f1_macro',
-                                   n_jobs=-1)
+    for model_name, (model, params) in modelos.items():
+        pipe=PipelineIMB([('Preprocessor',preprocessor), ('Resampler', resampler), ('model',model)])
+        grid_search = GridSearchCV(pipe, params, cv=2, scoring=['accuracy', 'f1_macro'], refit='f1_macro' , n_jobs=-1)
         grid_search.fit(X_train, y_train)
 
-        print(
-            f"# Melhores parâmetros para {nome_modelo}: {grid_search.best_params_}"
-        )
+        print(f"Best parameters for {model_name}: {grid_search.best_params_}")
+        
+        scores={'model':model_name,
+                'F1_score':grid_search.cv_results_['mean_test_f1_macro'][grid_search.best_index_],
+                'Accuracy':grid_search.cv_results_['mean_test_accuracy'][grid_search.best_index_]}
+        best_score.append(scores)
 
-        best_accuracy = grid_search.cv_results_['mean_test_accuracy'][
-            grid_search.best_index_]
-        best_f1_macro = grid_search.best_score_
-
-        score = {
-            'Modelo': nome_modelo,
-            'F1 Macro Score': best_f1_macro,
-            'Accuracy': best_accuracy
-        }
-        melhor_score.append(score)
-
-    return pd.DataFrame(melhor_score)
+    return pd.DataFrame(best_score)
