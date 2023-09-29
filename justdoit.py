@@ -152,14 +152,14 @@ def hyperparameter_optimization(resampler, preprocessor, X_train, y_train, model
 
     for model_name, (model, params) in modelos.items():
         pipe=PipelineIMB([('Preprocessor',preprocessor), ('Resampler', resampler), ('model',model)])
-        grid_search = GridSearchCV(pipe, params, cv=2, scoring=['accuracy', 'f1_macro'], refit='f1_macro' , n_jobs=-1)
+        grid_search = GridSearchCV(pipe, params, cv=2, scoring=['recall_macro', 'f1_macro'], refit='recall_macro' , n_jobs=-1)
         grid_search.fit(X_train, y_train)
 
         print(f"Best parameters for {model_name}: {grid_search.best_params_}")
         
         scores={'model':model_name,
                 'F1_score':grid_search.cv_results_['mean_test_f1_macro'][grid_search.best_index_],
-                'Accuracy':grid_search.cv_results_['mean_test_accuracy'][grid_search.best_index_]}
+                'Recall':grid_search.cv_results_['mean_test_recall_macro'][grid_search.best_index_]}
         best_score.append(scores)
 
     return pd.DataFrame(best_score)
