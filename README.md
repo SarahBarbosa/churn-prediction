@@ -31,7 +31,7 @@ Na segunda semana, concentramos nossos esforços na construção e otimização 
 - Visualização dos resultados usando a matriz de confusão e a curva ROC (com o valor da AUC).
 - Explicação dos resultados usando SHAP (Feature Importance e Waterfall).
 
-**Notebook Correspondente:** [`S01_ETL_EDA.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
+**Notebook Correspondente:** [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
 
 ### :arrow_right: Resultados dos Modelos
 
@@ -48,7 +48,7 @@ Embora os três modelos tenham pontuações muito próximas, a estratégia de Ov
 
 Dado o setor de telecomunicações, onde o custo de atrair novos clientes é alto, minimizar a perda de clientes é fundamental. Portanto, consideramos o modelo Regressão Logística com oversampling como a escolha mais adequada para prever a probabilidade de um cliente churn.
 
-### :arrow_right: Recomendações
+### :arrow_right: Resumo das Recomendações 🚀
 
 - Priorizar Contratos de Longo Prazo: A análise de dados demonstrou que clientes com contratos de maior duração têm maior probabilidade de permanecer na Novexus. Recomendamos que a empresa concentre-se em oferecer planos de contrato anual tradicionais, alocando recursos significativos de marketing e promoções para esses planos.
 
@@ -56,7 +56,9 @@ Dado o setor de telecomunicações, onde o custo de atrair novos clientes é alt
 
 - Promoção da Fibra Óptica: Para combater a alta taxa de churn entre os clientes de fibra óptica, considere oferecer descontos especiais para incentivá-los a permanecer. Comunique claramente esses benefícios aos clientes de fibra óptica.
 
-- Redução do Processamento de Cheques Eletrônicos: Avalie a possibilidade de incentivar os clientes a migrarem para métodos de pagamento mais eficientes, como pagamentos com cartão de crédito. Ofereça incentivos para essa transição, reduzindo a taxa de churn. 🚀
+- Redução do Processamento de Cheques Eletrônicos: Avalie a possibilidade de incentivar os clientes a migrarem para métodos de pagamento mais eficientes, como pagamentos com cartão de crédito. Ofereça incentivos para essa transição.
+
+**Resumo detalhado:** [`Última seção no arquivo S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
 
 > Status do Projeto: Em desenvolvimento :warning:
 

@@ -1,0 +1,6 @@
+category-encoders==2.6.2
+imbalanced-learn==0.11.0
+joblib==1.3.2
+plotly==5.17.0
+scikit-learn==1.3.1
+streamlit==1.27.1
