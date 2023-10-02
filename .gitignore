@@ -2,7 +2,6 @@
 __pycache__/
 .venv
 venv_app
-.streamlit
 
 # Files
 *.pyc
