@@ -4,7 +4,7 @@
   <img src="https://imgur.com/1yxAnVf.png" style="width: 100%;">
 </p>
 
-No [Alura Challenge Dados 2ª Edição](https://www.alura.com.br/challenges/dados-2?host=https://cursos.alura.com.br), o objetivo é desenvolver uma solução para uma empresa de telecomunicações que visa compreender e prever a Taxa de Evasão de Clientes (Churn Rate). O projeto segue um cronograma de quatro semanas, com cada semana correspondendo a uma etapa específica. Nesta descrição, focaremos na primeira semana:
+No [Alura Challenge Dados 2ª Edição](https://www.alura.com.br/challenges/dados-2?host=https://cursos.alura.com.br), o objetivo é desenvolver uma solução para uma empresa de telecomunicações que visa compreender e prever a Taxa de Evasão de Clientes (Churn Rate). O projeto segue um cronograma de quatro semanas, com cada semana correspondendo a uma etapa específica.
 
 ## 📋 Detalhes do Projeto: Redução da Taxa de Evasão de Clientes na Novexus
 
@@ -33,7 +33,19 @@ Na segunda semana, concentramos nossos esforços na construção e otimização 
 
 **Notebook Correspondente:** [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
 
-### :arrow_right: Resultados dos Modelos
+Claro, aqui está o texto melhorado de acordo com o código e a abordagem técnica em Data Science:
+
+### :arrow_right: Semana 03&04: Deploy do Modelo :dash:
+
+Nas últimas duas semanas, nos concentramos na criação de um aplicativo utilizando a biblioteca Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados.
+
+Quando o usuário utiliza o aplicativo, ele recebe como retorno a probabilidade de um cliente deixar a empresa. Essa probabilidade é apresentada de forma visual através de um gráfico tipo "gauge chart". O aplicativo proporciona uma experiência de usuário intuitiva e eficiente para a avaliação do churn, permitindo à equipe tomar decisões informadas e estratégicas (veja as recomendações).
+
+> Para acessar o aplicativo, clique no link a seguir: [Churn Predictor Novexus](https://churn-prediction-novexus.streamlit.app/)
+
+O código-fonte do aplicativo está disponível no repositório GitHub: [`S03_App.py`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S03_App.py).
+
+### :arrow_right: Resultados dos Modelos :chart_with_upwards_trend:
 
 Após o treinamento de 6 modelos (Regressão Logística, K-Vizinhos Mais Próximos (KNN), Gradient Boosting, Árvore de Decisão, Floresta Randômica e Support Vector Machine), observamos que a Regressão Logística se destacou nas três abordagens em relação ao Recall. Escolhemos mais dois modelos com melhor desempenho nessa métrica e realizaremos um ajuste de hiperparâmetros usando Grid Search. Os resultados foram os seguintes:
 
@@ -58,7 +70,7 @@ Dado o setor de telecomunicações, onde o custo de atrair novos clientes é alt
 
 - Redução do Processamento de Cheques Eletrônicos: Avalie a possibilidade de incentivar os clientes a migrarem para métodos de pagamento mais eficientes, como pagamentos com cartão de crédito. Ofereça incentivos para essa transição.
 
-**Resumo detalhado:** [`Última seção no arquivo S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
+**Recomendações detalhadas:** Última seção no arquivo [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
 
-> Status do Projeto: Em desenvolvimento :warning:
+> Status do Projeto: Concluido :heavy_check_mark:
 
