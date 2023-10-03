@@ -21,7 +21,7 @@ Na primeira semana, focamos na preparação dos dados e na obtenção de insight
 
 ### :arrow_right: Semana 02: Engenharia de Features e Construção de Modelos de Machine Learning
 
-Na segunda semana, concentramos nossos esforços na construção e otimização de modelos de machine learning (ML). Os processos incluíram:
+Na segunda semana, concentramos na construção e otimização de modelos de machine learning (ML). Os processos incluíram:
 
 - Lidar com o desbalanceamento dos dados da target usando três abordagens: Oversampling (SMOTE), Undersampling (Tomek Links) e Default (mantendo o desbalanceamento).
 - Encoding dos dados categóricos usando CatBoost, normalização dos dados numéricos usando StandardScaler e construção do pipeline.
@@ -33,11 +33,9 @@ Na segunda semana, concentramos nossos esforços na construção e otimização 
 
 **Notebook Correspondente:** [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
 
-Claro, aqui está o texto melhorado de acordo com o código e a abordagem técnica em Data Science:
-
 ### :arrow_right: Semana 03&04: Deploy do Modelo :dash:
 
-Nas últimas duas semanas, nos concentramos na criação de um aplicativo utilizando a biblioteca Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados.
+Nas últimas duas semanas desenvolvemos um aplicativo utilizando o Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados.
 
 Quando o usuário utiliza o aplicativo, ele recebe como retorno a probabilidade de um cliente deixar a empresa. Essa probabilidade é apresentada de forma visual através de um gráfico tipo "gauge chart". O aplicativo proporciona uma experiência de usuário intuitiva e eficiente para a avaliação do churn, permitindo à equipe tomar decisões informadas e estratégicas (veja as recomendações).
 
