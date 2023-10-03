@@ -12,16 +12,16 @@ No [Alura Challenge Dados 2ª Edição](https://www.alura.com.br/challenges/dado
 
 Na primeira semana, focamos na preparação dos dados e na obtenção de insights iniciais (ETL & EDA). As atividades incluíram:
 
-- Compreensão do conteúdo do conjunto de dados.
-- Identificação e tratamento de inconsistências.
-- Análise do comportamento das features categóricas e numéricas em relação ao Churn.
+- Compreensão do conteúdo do conjunto de dados;
+- Identificação e tratamento de inconsistências;
+- Análise do comportamento das features categóricas e numéricas em relação a target;
 - Avaliação da correlação entre as variáveis.
 
 **Notebook Correspondente:** [`S01_ETL_EDA.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S01_ETL_EDA.ipynb)
 
-### :arrow_right: Semana 02: Engenharia de Features e Construção de Modelos de Machine Learning
+### :arrow_right: Semana 02: Feature Engineering e Construção do Modelo de Machine Learning (ML)
 
-Na segunda semana, concentramos na construção e otimização de modelos de machine learning (ML). Os processos incluíram:
+Na segunda semana, construímos e otimizamos o modelo de ML. Os processos incluíram:
 
 - Lidar com o desbalanceamento dos dados da target usando três abordagens: Oversampling (SMOTE), Undersampling (Tomek Links) e Default (mantendo o desbalanceamento).
 - Encoding dos dados categóricos usando CatBoost, normalização dos dados numéricos usando StandardScaler e construção do pipeline.
@@ -35,26 +35,24 @@ Na segunda semana, concentramos na construção e otimização de modelos de mac
 
 ### :arrow_right: Semana 03&04: Deploy do Modelo :dash:
 
-Nas últimas duas semanas desenvolvemos um aplicativo utilizando o Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados.
-
-Quando o usuário utiliza o aplicativo, ele recebe como retorno a probabilidade de um cliente deixar a empresa. Essa probabilidade é apresentada de forma visual através de um gráfico tipo "gauge chart". O aplicativo proporciona uma experiência de usuário intuitiva e eficiente para a avaliação do churn, permitindo à equipe tomar decisões informadas e estratégicas (veja as recomendações).
+Nas últimas duas semanas desenvolvemos um aplicativo utilizando o Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados. Quando o usuário utiliza o aplicativo, ele recebe como retorno a probabilidade de um cliente deixar a empresa. Essa probabilidade é apresentada de forma visual através de um gráfico tipo "gauge chart". 
 
 > Para acessar o aplicativo, clique no link a seguir: [Churn Predictor Novexus](https://churn-prediction-novexus.streamlit.app/)
 
-O código-fonte do aplicativo está disponível no repositório GitHub: [`S03_App.py`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S03_App.py).
+O código-fonte do aplicativo está disponível em: [`S03_App.py`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S03_App.py).
 
 ### :arrow_right: Resultados dos Modelos :chart_with_upwards_trend:
 
-Após o treinamento de 6 modelos (Regressão Logística, K-Vizinhos Mais Próximos (KNN), Gradient Boosting, Árvore de Decisão, Floresta Randômica e Support Vector Machine), observamos que a Regressão Logística se destacou nas três abordagens em relação ao Recall. Escolhemos mais dois modelos com melhor desempenho nessa métrica e realizaremos um ajuste de hiperparâmetros usando Grid Search. Os resultados foram os seguintes:
+Após o treinamento de 6 modelos (Regressão Logística, KNN, Gradient Boosting, Árvore de Decisão, Floresta Randômica e Support Vector Machine), observamos que a Regressão Logística se destacou nas três abordagens em relação ao Recall. Escolhemos mais dois modelos com melhor desempenho nessa métrica e realizaremos um ajuste de hiperparâmetros usando Grid Search. Os resultados foram os seguintes:
 
 - Na estratégia de Oversampling, a Regressão Logística alcançou um Recall de 76.29%.
 - Na estratégia de Oversampling e na estratégia Default, a Gradient Boosting alcançou um Recall de 74.67% e 73.62%, respectivamente.
 
-Embora os três modelos tenham pontuações muito próximas, a estratégia de Oversampling se destacou. Portanto, utilizamos esses três melhores modelos para avaliar o conjunto de teste. Os resultados foram:
+Embora os três modelos tenham pontuações muito próximas, a estratégia de Oversampling se destacou. Portanto, utilizamos esses três melhores modelos para avaliar no conjunto de teste. Os resultados foram:
 
-- A Regressão Logística com Oversampling tem o recall mais alto, mas a precisão é um pouco baixa.
-- O Gradient Boosting com Undersampling equilibra razoavelmente precisão e recall.
-- O Gradient Boosting com amostragem padrão tem a melhor precisão para a classe 1, mas o recall é mais baixo.
+- A Regressão Logística com Oversampling teve o recall mais alto, mas a precisão foi um pouco baixa.
+- O Gradient Boosting com Undersampling equilibrou razoavelmente a precisão e o recall.
+- O Gradient Boosting com amostragem padrão teve a melhor precisão para a classe 1, mas o recall foi mais baixo.
 
 Dado o setor de telecomunicações, onde o custo de atrair novos clientes é alto, minimizar a perda de clientes é fundamental. Portanto, consideramos o modelo Regressão Logística com oversampling como a escolha mais adequada para prever a probabilidade de um cliente churn.
 
