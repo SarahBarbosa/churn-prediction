@@ -7,10 +7,10 @@ import joblib
 import time
 
 # Carregar o modelo previamente treinado
-modelo = joblib.load('logistic_regression_model.pkl')
+modelo = joblib.load('model/logistic_regression_model.pkl')
 
 # Carregar as colunas do arquivo CSV
-colunas = pd.read_csv('Dados/dados_tratados.csv').columns[1:] # Removendo Churn
+colunas = pd.read_csv('data/dados_tratados.csv').columns[1:] # Removendo Churn
 
 # Função para calcular o número total de serviços contratados (mesma do justdoit)
 def TotalServiceTransformer(X):

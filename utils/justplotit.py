@@ -1,8 +1,14 @@
+import pandas as pd
+import numpy as np
+
 import seaborn as sns
 import matplotlib.pyplot as plt
-import numpy as np
-import justdoit as jdi
-from sklearn.metrics import confusion_matrix
+
+import utils.justdoit as jdi
+from typing import List
+
+import warnings
+warnings.filterwarnings('ignore')
 
 plt.rc('font', size=14)
 plt.rc('axes', labelsize=14, titlesize=14)
@@ -10,20 +16,26 @@ plt.rc('legend', fontsize=14)
 plt.rc('xtick', labelsize=12)
 plt.rc('ytick', labelsize=12)
 
-def frequencia_churn(dados, palette='novexus'):
+def frequencia_churn(dados: pd.DataFrame, palette: str = 'novexus') -> None:
     """
     Plota a frequência de Churn.
+
+    Parameters:
+    -----------
+    dados : pd.DataFrame
+        O DataFrame contendo os dados.
+    palette : str, optional
+        A paleta de cores a ser utilizada. Padrão é 'novexus'.
     """
     if palette == 'novexus':
-        paleta = ['#171821', '#872b95', '#ff7131', '#fe3d67']
+        paleta = ['#171821', '#872b95']
 
     plt.figure(figsize=(10, 5))
-    
+
     ax = sns.barplot(x=dados['Churn'].value_counts().index, 
                      y=dados['Churn'].value_counts(normalize=True), 
-                     palette=paleta, 
-                     alpha=0.8)
-    
+                     palette=paleta, alpha=0.8, legend=False)
+
     sns.despine(right=True, top=True, left=True)
     ax.set(ylabel=None)
     ax.tick_params(left=False)
@@ -34,12 +46,26 @@ def frequencia_churn(dados, palette='novexus'):
         y = p.get_height()
         ax.annotate(f'{y:.2%}\n', (x, y), ha='center', va='bottom', color='gray')
 
-    plt.title('Frequência Churn', y=1.2);
+    plt.title('Frequência Churn', y=1.2)
+    plt.show()
 
-def countplots(data, coluna_hue, grupos, paleta, figsize=(12, 8)):
+def countplots(data: pd.DataFrame, coluna_hue: str, grupos: List[str], paleta: List[str], figsize: tuple = (12, 8)) -> None:
   """
   Gera subplots de gráficos de barras com contagem para várias colunas 
   categóricas.
+
+  Parameters:
+  -----------
+  data : pd.DataFrame
+      O DataFrame contendo os dados.
+  coluna_hue : str
+      A coluna a ser usada para colorir os subplots.
+  grupos : List[str]
+      Lista de colunas a serem plotadas.
+  paleta : List[str]
+      A paleta de cores a ser utilizada.
+  figsize : tuple, optional
+      O tamanho da figura.
   """
   num_grupos = len(grupos)
   cols = 2
@@ -87,9 +113,18 @@ def countplots(data, coluna_hue, grupos, paleta, figsize=(12, 8)):
 
   plt.tight_layout();
 
-def histogramas(dados, features_num, paleta,):
+def histogramas(dados: pd.DataFrame, features_num: pd.DataFrame, paleta: List[str]) -> None:
   """
   Plota histogramas para colunas numéricas com base na variável 'Churn'.
+
+  Parameters:
+  -----------
+  dados : pd.DataFrame
+      O DataFrame contendo os dados.
+  features_num : pd.DataFrame
+      O DataFrame contendo as features numéricas.
+  paleta : List[str]
+      A paleta de cores a ser utilizada.
   """
   fig, axes = plt.subplots(1, len(features_num.columns), figsize=(13, 5), sharey=True)
 
@@ -110,9 +145,18 @@ def histogramas(dados, features_num, paleta,):
 
   plt.tight_layout();
 
-def boxplots(dados, features_num, paleta):
+def boxplots(dados: pd.DataFrame, features_num: pd.DataFrame, paleta: List[str]) -> None:
     """
     Plota boxplots para colunas numéricas com base na variável 'Churn'.
+
+    Parameters:
+    -----------
+    dados : pd.DataFrame
+        O DataFrame contendo os dados.
+    features_num : pd.DataFrame
+        O DataFrame contendo as features numéricas.
+    paleta : List[str]
+        A paleta de cores a ser utilizada.
     """
     _, axes = plt.subplots(1, len(features_num.columns), figsize=(13, 7))
 
@@ -126,10 +170,20 @@ def boxplots(dados, features_num, paleta):
 
     plt.tight_layout();
 
-def confusion_matrix(conf_matrix, nome_modelo):
+def confusion_matrix(conf_matrix: np.ndarray, nome_modelo: str) -> None:
+  """
+  Plota a matriz de confusão.
+
+  Parameters:
+  -----------
+  conf_matrix : np.ndarray
+      A matriz de confusão.
+  nome_modelo : str
+      O nome do modelo.
+  """
   labels = ['Não Churn', 'Churn']
   plt.figure(figsize=(8, 6))
-  sns.set(font_scale=1.2)
+  sns.set_theme(font_scale=1.2)
   sns.heatmap(conf_matrix, annot=True, fmt='g', cmap="flare", cbar=False,
               xticklabels=labels, yticklabels=labels)
   plt.xlabel('Valores previstos')
