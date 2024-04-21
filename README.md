@@ -17,7 +17,7 @@ Na primeira semana, focamos na preparação dos dados e na obtenção de insight
 - Análise do comportamento das features categóricas e numéricas em relação a target;
 - Avaliação da correlação entre as variáveis.
 
-**Notebook Correspondente:** [`S01_ETL_EDA.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S01_ETL_EDA.ipynb)
+**Notebook Correspondente:** [`S01.ipynb`](https://github.com/SarahBarbosa/churn-prediction/blob/main/S01.ipynb)
 
 ### :arrow_right: Semana 02: Feature Engineering e Construção do Modelo de Machine Learning (ML)
 
@@ -31,7 +31,7 @@ Na segunda semana, construímos e otimizamos o modelo de ML. Os processos inclu�
 - Visualização dos resultados usando a matriz de confusão e a curva ROC (com o valor da AUC).
 - Explicação dos resultados usando SHAP (Feature Importance e Waterfall).
 
-**Notebook Correspondente:** [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
+**Notebook Correspondente:** [`S02.ipynb`](https://github.com/SarahBarbosa/churn-prediction/blob/main/S02.ipynb)
 
 ### :arrow_right: Semana 03&04: Deploy do Modelo :dash:
 
@@ -39,7 +39,7 @@ Nas últimas duas semanas desenvolvemos um aplicativo utilizando o Streamlit par
 
 > Para acessar o aplicativo, clique no link a seguir: [Churn Predictor Novexus](https://churn-prediction-novexus.streamlit.app/)
 
-O código-fonte do aplicativo está disponível em: [`S03_App.py`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S03_App.py).
+O código-fonte do aplicativo está disponível em: [`S03.py`](https://github.com/SarahBarbosa/churn-prediction/blob/main/S03.py).
 
 ### :arrow_right: Resultados dos Modelos :chart_with_upwards_trend:
 
@@ -66,7 +66,7 @@ Dado o setor de telecomunicações, onde o custo de atrair novos clientes é alt
 
 - Redução do Processamento de Cheques Eletrônicos: Avalie a possibilidade de incentivar os clientes a migrarem para métodos de pagamento mais eficientes, como pagamentos com cartão de crédito. Ofereça incentivos para essa transição.
 
-**Recomendações detalhadas:** Última seção no arquivo [`S02_FeatureEng_ML.ipynb`](https://github.com/SarahBarbosa/Churn-Prediction-ACDII/blob/main/S02_FeatureEng_ML.ipynb)
+**Recomendações detalhadas:** Última seção no arquivo [`S02.ipynb`](https://github.com/SarahBarbosa/churn-prediction/blob/main/S02.ipynb)
 
 > Status do Projeto: Concluido :heavy_check_mark:
 
