@@ -37,7 +37,7 @@ Na segunda semana, construímos e otimizamos o modelo de ML. Os processos inclu�
 
 Nas últimas duas semanas desenvolvemos um aplicativo utilizando o Streamlit para disponibilizar nosso modelo de previsão de churn para a Novexus. Esse aplicativo oferece duas opções de entrada de dados: a possibilidade de importar um arquivo CSV contendo os dados do cliente ou a inserção manual desses dados. Quando o usuário utiliza o aplicativo, ele recebe como retorno a probabilidade de um cliente deixar a empresa. Essa probabilidade é apresentada de forma visual através de um gráfico tipo "gauge chart". 
 
-> Para acessar o aplicativo, clique no link a seguir: [Churn Predictor Novexus](https://churn-prediction-novexus.streamlit.app/)
+> Para acessar o aplicativo, clique no link a seguir: [Churn Predictor Novexus](https://churn-prediction-novexus1.streamlit.app/)
 
 O código-fonte do aplicativo está disponível em: [`S03.py`](https://github.com/SarahBarbosa/churn-prediction/blob/main/S03.py).
 
