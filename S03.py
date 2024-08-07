@@ -68,7 +68,7 @@ st.set_page_config(page_title = 'Churn Predictor Novexus',
                    layout = 'wide')
 
 # Inserir o logotipo
-image = Image.open('Identidade Visual/Logo (8).png')
+image = Image.open('images/Logo (8).png')
 st.image(image, use_column_width = True)
 
 # Título principal
