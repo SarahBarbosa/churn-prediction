@@ -62,7 +62,7 @@ def exibir_previsao(dados_entrada):
         st.plotly_chart(fig, use_container_width=True)
 
 # Configurações da página Streamlit (streamlit run S03_App.py)
-im = Image.open('Identidade Visual/icon.ico')
+im = Image.open('images/icon.ico')
 st.set_page_config(page_title = 'Churn Predictor Novexus', 
                    page_icon = im,
                    layout = 'wide')
