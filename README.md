@@ -1,9 +1,5 @@
 # Alura Challenge Dados 2ª Edição 📊
 
-<p align="center">
-  <img src="https://imgur.com/1yxAnVf.png" style="width: 100%;">
-</p>
-
 No [Alura Challenge Dados 2ª Edição](https://www.alura.com.br/challenges/dados-2?host=https://cursos.alura.com.br), o objetivo é desenvolver uma solução para uma empresa de telecomunicações que visa compreender e prever a Taxa de Evasão de Clientes (Churn Rate). O projeto segue um cronograma de quatro semanas, com cada semana correspondendo a uma etapa específica.
 
 ## 📋 Detalhes do Projeto: Redução da Taxa de Evasão de Clientes na Novexus
